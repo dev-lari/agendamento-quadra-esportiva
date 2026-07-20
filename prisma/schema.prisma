@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js" // incluir -js ao comentar(excluir) a linha abaixo
+  // output   = "../generated/prisma" // Essa configuração usa o novo gerador do Prisma, que cria vários arquivos .ts (TypeScript) na pasta generated/prisma.
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Player {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  email       String    @db.VarChar(100)      @unique
+  phone       String    @db.VarChar(100)
+  schedules   Schedule[]
+
+  @@map("players")
+}
+
+model Court {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  sport       String    @db.VarChar(100)
+  location    String    @db.VarChar(100)
+  schedules   Schedule[]
+
+  @@map("courts")
+}
+
+model Schedule {
+  id          String    @id @default(uuid())
+  player_id   String
+  court_id    String
+  start_time  DateTime
+  end_time    DateTime
+  player      Player    @relation(fields: [player_id], references: [id])
+  court       Court     @relation(fields: [court_id], references: [id])
+
+  @@map("schedules")
+}
