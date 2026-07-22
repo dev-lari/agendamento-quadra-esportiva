@@ -2,12 +2,16 @@ import "dotenv/config";
 import express, { response } from "express";
 import prismaClient from "./database/PrismaClient.js";
 
+import players from "./src/players.js"
+import router from "./src/routes/index.js";
+
 const app = express();
 app.use(express.json());
-app.use(router)
+
 
 app.use(players);
 
+app.use(router)
 
 app.listen(3000, () => {
     console.log("Server running")
