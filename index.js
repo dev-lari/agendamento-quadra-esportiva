@@ -1,14 +1,12 @@
+import "dotenv/config";
 import express, { response } from "express";
 import prismaClient from "./database/PrismaClient.js";
+import players from "./src/players.js"
 
 const app = express();
 app.use(express.json());
 
-app.get("/players", async (request, response) => {
-    const players = await prismaClient.player.findMany();
-    return response.status(200).json(players);
-})
-
+app.use(players);
 
 
 app.listen(3000, () => {
