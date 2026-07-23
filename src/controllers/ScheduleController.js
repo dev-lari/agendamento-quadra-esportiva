@@ -40,8 +40,11 @@ export class ScheduleController {
                 orderBy: {
                     start_time: "asc"
                 },
-                select: { id: true, player_id: true, court_id:true, start_time: true, end_time: true},
-
+                //select: { id: true, player_id: true, court_id:true, start_time: true, end_time: true},
+                include: {
+                    player: true,
+                    court: true
+                }
             });
             return response.status(200).json(schedule);
         } catch(error) {
