@@ -54,7 +54,7 @@ export class ScheduleController {
     }
 
     async postSchedule (request, response) {
-        const { player_id, court_id, data, start_time, end_time} = request.body;
+        const { player_id, court_id, start_time, end_time} = request.body;
         try {
             var start_date = new Date(start_time).getTime()
             var end_date = new Date (end_time).getTime()
@@ -71,7 +71,7 @@ export class ScheduleController {
                     data: {
                         player_id,
                         court_id,
-                        //data: data,
+                        //create_at: new Date(),
                         start_time: new Date(start_time),
                         end_time: new Date(end_time)
                     },
@@ -90,7 +90,7 @@ export class ScheduleController {
     }
 
     async putSchedule(request, response) {
-        const { player_id, court_id, data, start_time, end_time, observacao} = request.body;
+        const { player_id, court_id, start_time, end_time, observacao} = request.body;
 
         const { id } = request.params;
         try {
@@ -130,7 +130,6 @@ export class ScheduleController {
                 data: {
                     player_id,
                     court_id,
-                    //data: new Date(),
                     start_time: new Date(start_time),
                     end_time: new Date(end_time),
                     //observacao: observacao
