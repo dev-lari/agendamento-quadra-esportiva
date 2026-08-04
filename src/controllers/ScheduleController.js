@@ -16,19 +16,30 @@ async function hasScheduleConflict(court_id,start_time, end_time) {
     return schedule !== null;
 }
 
-function hassErrorDate(date_start, date_end) {
+function hassErrorDate(date_start, date_end, player_id, court_id) {
     if (date_end <= date_start) {
         return {
             error: "A data de fim deve ser maior que a inicial."
         };
     }
 
-    if (date_start < new Date().getTime()) {
+    if (date_start < new Date()) {
         return {
             error: "Essa data já passou."
         };
     }
 
+    if (player_id == null){
+         return {
+            error: "O jogador deve ser informado!"
+        };
+    }
+
+    if (court_id == null){
+         return {
+            error: "A Quadra deve ser informada!"
+        };
+    }
     return null
 }
 
@@ -53,13 +64,35 @@ export class ScheduleController {
         }
     }
 
+    async getById (request, response) {
+        const { id } = request.params;
+        try {
+            const scheduleExist = await prismaClient.schedule.findUnique(
+            {   where: { id },
+                include: {
+                    player: true,
+                    court: true
+                } 
+            },
+            )
+    
+            if (!scheduleExist) {
+                return response.status(404).json({error: "schedule not found"});
+            }
+    
+            return response.status(200).send(scheduleExist);
+        } catch(error) {
+            return response.status(500).json({"error": error});
+        }
+    }
+
     async postSchedule (request, response) {
         const { player_id, court_id, start_time, end_time} = request.body;
         try {
-            var start_date = new Date(start_time).getTime()
-            var end_date = new Date (end_time).getTime()
+            var start_date = new Date(start_time)
+            var end_date = new Date (end_time)
 
-            const hasError =  hassErrorDate(start_date, end_date)
+            const hasError =  hassErrorDate(start_date, end_date, player_id, court_id)
 
             if (hasError != null)
                 return response.json(hasError)
@@ -94,10 +127,10 @@ export class ScheduleController {
 
         const { id } = request.params;
         try {
-            var start_date = new Date(start_time).getTime()
-            var end_date = new Date(end_time).getTime()
+            var start_date = new Date(start_time)
+            var end_date = new Date(end_time)
 
-            const hasError =  hassErrorDate(start_date, end_date)
+            const hasError =  hassErrorDate(start_date, end_date, player_id, court_id)
 
             if (hasError != null)
                 return response.json(hasError)
