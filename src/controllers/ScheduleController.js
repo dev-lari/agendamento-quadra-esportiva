@@ -46,8 +46,34 @@ function hassErrorDate(date_start, date_end, player_id, court_id) {
 export class ScheduleController {
 
     async getSchedule (request, response) {
+        const { name, start_time, end_time } = request.query;
+        const whereCondition = {};
         try {
+            if (name) {
+                whereCondition.player = {
+                    name: {
+                        contains: name,
+                        mode: 'insensitive' // Ignora maiúsculas/minúsculas
+                    }
+                };
+            }
+
+            if (start_time || end_time) {
+                whereCondition.start_time = {};
+                whereCondition.end_time = {};
+
+                if (start_time) {
+                    // Converte a string da query em um objeto Date do JavaScript
+                    whereCondition.start_time.gte = new Date(start_time);
+                }
+
+                if (end_time) {
+                    // Converte a string da query em um objeto Date do JavaScript
+                    whereCondition.end_time.lte = new Date(end_time);
+                }
+            }
             const schedule = await prismaClient.schedule.findMany({
+                where: whereCondition,
                 orderBy: {
                     start_time: "asc"
                 },
