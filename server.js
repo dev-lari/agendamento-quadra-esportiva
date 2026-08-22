@@ -1,6 +1,4 @@
-import "dotenv/config";
 import express, { response } from "express";
-import prismaClient from "./database/PrismaClient.js";
 
 import players from "./src/players.js"
 import router from "./src/routes/index.js";
@@ -17,5 +15,5 @@ app.use(players);
 app.use(router)
 
 app.listen(3000, () => {
-    console.log("Server running")
+    console.log("Server running localhost:3000")
 })

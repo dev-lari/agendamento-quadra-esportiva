@@ -9,6 +9,7 @@ const courtController = new CourtController()
 
 // schedule routes
 router.get("/reservas", scheduleController.getSchedule)
+router.get("/reservas/:id", scheduleController.getById)
 router.post("/reserva", scheduleController.postSchedule)
 router.put("/reserva/:id", scheduleController.putSchedule)
 router.delete("/reserva/:id", scheduleController.deleteSchedule)
