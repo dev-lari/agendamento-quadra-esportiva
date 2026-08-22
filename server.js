@@ -1,13 +1,15 @@
 import express, { response } from "express";
-import cors from 'cors';
 
 import players from "./src/players.js"
 import router from "./src/routes/index.js";
+
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
 
 app.use(cors());
+
 app.use(players);
 
 app.use(router)
